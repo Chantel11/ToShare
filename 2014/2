@@ -1,0 +1,35 @@
+
+#2014Q2 
+
+
+Dem = [10, 20, 30, 30, 20, 20] 
+
+#Stage t 
+#State s is how many units stored 
+#Action a is how many units ordered 
+
+#TRANSITION FUNCTION 
+#want to produce (t+1, rollover)
+def T(t, s, a): 
+    leftover = s + a - Dem[t] 
+    rollover = min(leftover, 40)
+    
+    return (t+1, rollover) 
+
+#CONTRIBUTION FUNCTION 
+#want to say how much $$$ 
+
+def C(t, s, a): 
+    leftover = s + a - Dem[t]
+    rollover = min(leftover, 40) 
+    
+    if a > 0: 
+        contribution = rollover*0.1 + 20 + 2*a
+    else: 
+        contribution = rollover*0.1 
+    
+    return contribution 
+
+#VALUE FUNCTION 
+def V(t, s):
+    return min((C(t, s, a) + V(T(t, s, a))[0], a) for a in range(50))
